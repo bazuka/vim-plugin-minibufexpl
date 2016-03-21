@@ -99,6 +99,9 @@ endif
 if !exists(':MBEbun')
   command! -bang -nargs=* MBEbun call <SID>DeleteBuffer(2,'<bang>'=='!',<f-args>)
 endif
+if !exists(':MBEGotoBuf')
+  command! -bang -nargs=* MBEGotoBuf call <SID>GotoBuf(<f-args>)
+endif
 
 " }}}
 "
@@ -1514,16 +1517,22 @@ function! <SID>BuildBufferList(curBufNum)
 
     let l:tabList = []
     let l:maxTabWidth = 0
+    "bazuka
+    let l:bufIdx = 0
 
     " Loop through every buffer less than the total number of buffers.
     for l:i in s:BufList
         let l:BufName = expand( "#" . l:i . ":p:t")
 
+        "bazuka
+        let l:bufIdx = l:bufIdx + 1
         " Establish the tab's content, including the differentiating root
         " dir if neccessary
         let l:tab = '['
         if g:miniBufExplShowBufNumbers == 1
-            let l:tab .= l:i.':'
+            "bazuka
+            "let l:tab .= l:i.':'
+            let l:tab .= l:bufIdx.':'
         endif
         let l:tab .= s:bufUniqNameDict[l:i]
         let l:tab .= ']'
@@ -2494,6 +2503,18 @@ function! s:SwitchWindow(action, ...)
   call <SID>DEBUG('Leaving SwitchWindow()',10)
 endfunction
 
+" }}}
+
+" }}}
+" GotoBuf {{{
+"
+function! <SID>GotoBuf(bufIdx)
+  if a:bufIdx > len(s:BufList) || a:bufIdx <= 0
+    return
+  endif
+  let l:moveCmd = 'b! '.s:BufList[a:bufIdx - 1]
+  exec l:moveCmd
+endfunction
 " }}}
 
 " vim:ft=vim:fdm=marker:ff=unix:nowrap:tabstop=2:shiftwidth=2:softtabstop=2:smarttab:shiftround:expandtab
