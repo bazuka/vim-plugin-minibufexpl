@@ -1517,21 +1517,17 @@ function! <SID>BuildBufferList(curBufNum)
 
     let l:tabList = []
     let l:maxTabWidth = 0
-    "bazuka
     let l:bufIdx = 0
 
     " Loop through every buffer less than the total number of buffers.
     for l:i in s:BufList
         let l:BufName = expand( "#" . l:i . ":p:t")
 
-        "bazuka
         let l:bufIdx = l:bufIdx + 1
         " Establish the tab's content, including the differentiating root
         " dir if neccessary
         let l:tab = '['
         if g:miniBufExplShowBufNumbers == 1
-            "bazuka
-            "let l:tab .= l:i.':'
             let l:tab .= l:bufIdx.':'
         endif
         let l:tab .= s:bufUniqNameDict[l:i]
